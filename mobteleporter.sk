@@ -1,0 +1,43 @@
+command /mob-teleporter [<text>]:
+	trigger:
+		if arg 1 is not set:
+			send "&a[MOB TELEPORTER] &7Funkcja umożliwia teleportacje moba do wybranego punktu!"
+			send "&f- &7/mob-teleporter miejsce &8Ustal miejsce do ktorego teleportujesz moba"
+			send "&f- &7/mob-teleporter mob &8Naceluj na moba aby go teleportować do miejsca"
+			send "&7Kolejność wykonania komend: najpierw ustal miejsce potem wybierz moba. Koszt $9000"
+		if arg 1 is "miejsce":
+			set {mt.%player%} to location of player
+			send "&a[MOB TELEPORTER] &6Wybrano miejsce w którym się znajdujesz!"
+			send "&7Teraz naceluj na moba i wpisz &o/mob-teleporter mob"
+		if arg 1 is "mob":
+			if "%name of target entity%" is "<none>" or "mobdotp":
+				if target entity is set:
+					if "%type of target entity%" is "brown llama" or "iron golem" or "villager" or "creeper" or "zombie" or "spider" or "enderman" or "cow" or "pig" or "sheep" or "gold rabbit" or "squid":
+						if distance between player and target entity is less than 3:
+							if player can build at block at target entity:
+								if player's balance is greater or equal to 9000:
+									if {mt.%player%} is set:
+										if player can build at {mt.%player%}:
+											remove 9000 from player's balance
+											send "&a[MOB TELEPORTER] &7Teleportowano %type of target entity%&7 z %location of target entity%&7 do %{mt.%player%}%"
+											teleport target entity to {mt.%player%}
+											delete {mt.%player%}
+										else:
+											send "&a[MOB TELEPORTER] &7Musisz posiadac uprawnienia do terenu na który teleportujesz!"
+									else:
+										send "&a[MOB TELEPORTER] &7Ustal miejsce teleportacji!"
+								else:
+									send "&a[MOB TELEPORTER] &7Koszt to $9000. Nie posiadasz takich pieniędzy!"
+							else:
+								send "&a[MOB TELEPORTER] &7Musisz posiadać uprawnienia do terenu teleportacji!"
+						else:
+							send "&a[MOB TELEPORTER] &7Musisz znajdować się max 3 kratki od moba!"
+					else:
+						send "&a[MOB TELEPORTER] &7Niestety mob %type of target entity%&7 jest wykluczony z programu!"
+				else:
+					send "&a[MOB TELEPORTER] &7Nie nakierowałeś na żadnego moba!"
+			else:
+				send "&a[MOB TELEPORTER] &7Wybrany mob nie może posiadać nazwy oraz być innym graczem!"
+				send "&7Jeżeli twój mob ma już nazwe zmień na &fmobdotp"
+		else:
+            send "&a[MOB TELEPORTER] &cNie wpisałeś poprawnej komendy"
